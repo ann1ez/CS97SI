@@ -1,6 +1,5 @@
 import java.io.*;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.math.*;
 import java.util.Scanner;
 
 public class Yeehaa {
@@ -9,23 +8,18 @@ public class Yeehaa {
 		Scanner in = new Scanner(System.in);
 		int N = in.nextInt();
 		for(int i=1; i<=N; i++) {
-			double R = Double.parseDouble(in.next());
-			int n = in.nextInt();
-			double cosTerm = Math.cos(Math.toRadians((n-2)*90/n));
-			double r = R * cosTerm / (cosTerm + 1);
+			
+			BigDecimal R = new BigDecimal(in.next());
+			BigDecimal n = new BigDecimal(in.next());
+			
+			BigDecimal radian = n.subtract(BigDecimal.valueOf(2)).multiply(BigDecimal.valueOf(1.57079632679)).divide(n,5, RoundingMode.HALF_UP);
+			double cosTerm = Math.cos(radian.doubleValue());
+			BigDecimal r = R.multiply(BigDecimal.valueOf(cosTerm)).divide(BigDecimal.valueOf(cosTerm).add(BigDecimal.valueOf(1)), 5, RoundingMode.HALF_UP);
+			r = r.setScale(3, RoundingMode.HALF_UP);
 			System.out.println("Scenario #" + i + ":");
-			System.out.println(round(r, 3));
+			System.out.println(r);
 			System.out.println();
 		}
 		in.close();
 	}
-	
-	private static double round(double value, int places) {
-	    if (places < 0) throw new IllegalArgumentException();
-	 
-	    BigDecimal bd = new BigDecimal(Double.toString(value));
-	    bd = bd.setScale(places, RoundingMode.HALF_UP);
-	    return bd.doubleValue();
-	}
-
 }
